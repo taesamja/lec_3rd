@@ -152,6 +152,10 @@ void loop() {
 
 
 # 8주차: OLED(SSD 1306)=>SDA(D21), SCL(D22), VCC(VCC), GND(GND), 가변저항(D34)  [기본편]
+lib_deps =
+  adafruit/Adafruit SSD1306@^2.5.9
+  adafruit/Adafruit GFX Library@^1.11.5
+
 A
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -338,6 +342,9 @@ void loop() {
 
 
 # 9주차: OLED(SSD 1306)=>SDA(D21), SCL(D22), VCC(VCC), GND(GND), 가변저항(D34)  [응용편]
+lib_deps =
+  adafruit/Adafruit SSD1306@^2.5.9
+  adafruit/Adafruit GFX Library@^1.11.5
 A
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
