@@ -570,3 +570,233 @@ void loop() {
 
   delay(300);
 }
+
+
+# 10주차: OLED(SSD 1306)=>SDA(D21), SCL(D22), VCC(VCC), GND(GND) [종합편]
+         CDS(D34), LED(D2)
+lib_deps =
+  adafruit/Adafruit SSD1306@^2.5.9
+  adafruit/Adafruit GFX Library@^1.11.5
+A
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define CDS_PIN 34
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(CDS_PIN, INPUT);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.setTextSize(2);
+  display.setTextColor(SSD1306_WHITE);
+}
+
+void loop() {
+  int cdsValue = analogRead(CDS_PIN);
+
+  display.clearDisplay();
+  display.setCursor(0, 20);
+  display.print("CDS: ");
+  display.println(cdsValue);
+  display.display();
+
+  delay(500);
+}
+
+B
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define CDS_PIN 34
+#define LED_PIN 2
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define SCREEN_ADDRESS 0x3C  // 일반적인 SSD1306 I2C 주소
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  pinMode(CDS_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+
+  display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+}
+
+void loop() {
+  int cdsValue = analogRead(CDS_PIN);  // 밝기 읽기
+
+  // OLED 출력
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("CDS Value: ");
+  display.println(cdsValue);
+
+  if (cdsValue < 1000) {
+    digitalWrite(LED_PIN, HIGH);  // 어두우면 LED 켜짐
+    display.setCursor(0, 20);
+    display.println("LED: ON (Dark)");
+  } else {
+    digitalWrite(LED_PIN, LOW);   // 밝으면 LED 꺼짐
+    display.setCursor(0, 20);
+    display.println("LED: OFF (Bright)");
+  }
+
+  display.display();  // OLED 업데이트
+  delay(500);
+}
+
+C
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define CDS_PIN 34
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  pinMode(CDS_PIN, INPUT);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.setTextColor(SSD1306_WHITE);
+}
+
+void loop() {
+  int cdsValue = analogRead(CDS_PIN);
+  display.clearDisplay();
+
+  if (cdsValue < 1000) {
+    display.setCursor(0, 20);
+    display.setTextSize(2);
+    display.println("Good Night");
+  } else {
+    display.setCursor(0, 20);
+    display.setTextSize(1);
+    display.println("Good Morning");
+  }
+
+  display.display();
+  delay(500);
+}
+
+D
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define CDS_PIN 34
+#define LED_PIN 2
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  pinMode(CDS_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
+
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+}
+
+void loop() {
+  int cdsValue = analogRead(CDS_PIN);
+  display.clearDisplay();
+
+  if (cdsValue < 1000) {
+    digitalWrite(LED_PIN, HIGH);
+    display.setCursor(0, 20);
+    display.println("Good Night :)");
+  } else {
+    digitalWrite(LED_PIN, LOW);
+    display.setCursor(0, 20);
+    display.println("LED OFF");
+  }
+
+  display.display();
+  delay(500);
+}
+
+E
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <math.h>
+
+#define CDS_PIN 34
+#define LED_PIN 2
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define OLED_ADDR 0x3C
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+const int graphHeight = 40;
+const int graphWidth = SCREEN_WIDTH;
+
+float angle = 0;
+float baseFreq = 0.05; // 기본 주파수 (조도에 따라 변경)
+float freq = baseFreq;
+
+void setup() {
+  pinMode(CDS_PIN, INPUT);
+  ledcSetup(0, 5000, 8); // 채널0, 5kHz, 8비트 해상도
+  ledcAttachPin(LED_PIN, 0);
+
+  display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+}
+
+void loop() {
+  int cdsValue = analogRead(CDS_PIN); // 0~4095
+
+  // CDS값에 따라 주파수 조정 (예: 0.01 ~ 0.2 사이)
+  freq = map(cdsValue, 0, 4095, 1, 20) / 100.0;
+
+  // 현재 사인파 값 계산
+  float sineValue = sin(angle);
+
+  // LED PWM 밝기: 사인파 절댓값을 0~255 스케일로 변환
+  int pwmVal = (int)(abs(sineValue) * 255.0);
+  ledcWrite(0, pwmVal);
+
+  // OLED 출력
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("CDS: ");  display.println(cdsValue);
+  display.print("Freq: "); display.println(freq, 3);
+  display.print("PWM: ");  display.println(pwmVal);
+
+  // 사인파 그래프 그리기
+  for (int x = 0; x < graphWidth; x++) {
+    float val = sin(angle + x * freq);
+    int yPos = (int)((val + 1.0) * (graphHeight / 2));
+    display.drawPixel(x, graphHeight - yPos + 20, SSD1306_WHITE);
+  }
+
+  display.display();
+
+  angle += freq;
+  if (angle > 2 * PI) angle -= 2 * PI;
+
+  delay(30);
+}
