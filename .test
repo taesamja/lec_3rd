@@ -1,3 +1,4 @@
+# 7주차
 A
 #include <Arduino.h>
 const int TRIG = 12;   // 초음파 센서의 Trig 핀
@@ -146,4 +147,419 @@ void loop() {
     if (distance < 10) tone(BUZ, 1000);    else noTone(BUZ);
     delay(300);
   }
+}
+
+
+
+# 8주차: OLED(SSD 1306)=>SDA(D21), SCL(D22), VCC(VCC), GND(GND), 가변저항(D34)  [기본편]
+A
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define SCREEN_ADDRESS 0x3C
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+  display.clearDisplay();
+
+  display.setTextSize(2);             // 글자 크기
+  display.setTextColor(SSD1306_WHITE);// 흰색 글자
+  display.setCursor(10, 20);          // 위치 설정
+  display.println("Hello!");
+  display.display();                  // 화면에 출력
+}
+
+void loop() {
+  // 아무 작업 없음
+}
+
+B
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define SCREEN_ADDRESS 0x3C
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+  display.clearDisplay();
+}
+
+void loop() {
+  display.clearDisplay();
+  display.setTextColor(SSD1306_WHITE);
+
+  // 크기 1
+  display.setTextSize(1);
+  display.setCursor(0, 0);
+  display.println("Size 1");
+
+  // 크기 2
+  display.setTextSize(2);
+  display.setCursor(0, 16);
+  display.println("Size 2");
+
+  // 크기 3
+  display.setTextSize(3);
+  display.setCursor(0, 40);
+  display.println("Size 3");
+
+  display.display();
+
+  delay(5000);  // 5초 대기
+}
+
+C
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define SCREEN_ADDRESS 0x3C
+
+#define POTENTIOMETER_PIN 34 // 가변저항 입력 핀
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+
+  // OLED 초기화
+  display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS);
+  display.clearDisplay();
+
+  // 가변저항 핀 설정 (아날로그 입력)
+  pinMode(POTENTIOMETER_PIN, INPUT);
+}
+
+void loop() {
+  int potValue = analogRead(POTENTIOMETER_PIN); // 0 ~ 4095
+
+  // OLED 출력
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 10);
+  display.println("Potentiometer Value:");
+  display.setTextSize(2);
+  display.setCursor(0, 30);
+  display.println(potValue);
+  display.display();
+
+  delay(200);
+}
+
+D
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define POT_PIN 34  // 가변저항 연결 핀
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+}
+
+void loop() {
+  int val = analogRead(POT_PIN);
+  int percent = map(val, 0, 4095, 0, 100);
+  int barLength = map(val, 0, 4095, 0, 128);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0, 0);
+  display.print("Brightness: ");
+  display.print(percent);
+  display.println("%");
+
+  display.drawRect(0, 20, 128, 10, SSD1306_WHITE);
+  display.fillRect(0, 20, barLength, 10, SSD1306_WHITE);
+
+  display.display();
+
+  delay(200);
+}
+
+E
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+#include <math.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+int potPin = 34;
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+}
+
+void loop() {
+  int potVal = analogRead(potPin);
+  
+  // potVal 0~4095 -> amplitude 10~30
+  int amplitude = map(potVal, 0, 4095, 10, 30);
+
+  display.clearDisplay();
+
+  // x축 픽셀 전체 사용 (0~127)
+  for (int x = 0; x < SCREEN_WIDTH; x++) {
+    // sine 함수 입력값 (0 ~ 2PI*4 주기)
+    float angle = (float)x / SCREEN_WIDTH * 2.0 * 3.14159 * 4;
+
+    // sine 값 (−1 ~ 1) -> y 위치 변환 (중앙 ± amplitude)
+    int y = SCREEN_HEIGHT/2 + amplitude * sin(angle);
+
+    // 픽셀 그리기 (x,y)
+    display.drawPixel(x, y, SSD1306_WHITE);
+  }
+
+  display.display();
+  delay(50);
+}
+
+
+# 9주차: OLED(SSD 1306)=>SDA(D21), SCL(D22), VCC(VCC), GND(GND), 가변저항(D34)  [응용편]
+A
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define POT_PIN 34
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+}
+
+void loop() {
+  int val = analogRead(POT_PIN);
+  int volume = map(val, 0, 4095, 0, 100);
+  int barLength = map(val, 0, 4095, 0, 128);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+
+  display.setCursor(0,0);
+  display.print("Volume: ");
+  display.print(volume);
+  display.println("%");
+
+  display.drawRect(0, 20, 128, 15, SSD1306_WHITE);
+  display.fillRect(0, 20, barLength, 15, SSD1306_WHITE);
+
+  display.setCursor(0, 40);
+  if(volume == 0) display.println("Mute");
+  else if(volume < 70) display.println("Normal");
+  else display.println("Max");
+
+  display.display();
+  delay(200);
+}
+
+B
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define POT_PIN 34
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void drawSignalBars(int level) {
+  // 5단계 신호 막대 높이 배열
+  int barHeights[5] = {4, 8, 12, 16, 20};
+  int x_start = 10;
+  int y_base = 40;
+
+  for(int i=0; i<5; i++) {
+    int x = x_start + i*20;
+    int y = y_base - barHeights[i];
+    if(i < level) {
+      display.fillRect(x, y, 10, barHeights[i], SSD1306_WHITE);
+    } else {
+      display.drawRect(x, y, 10, barHeights[i], SSD1306_WHITE);
+    }
+  }
+}
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+}
+
+void loop() {
+  int val = analogRead(POT_PIN);
+  int level = map(val, 0, 4095, 0, 5);
+  int percent = map(val, 0, 4095, 0, 100);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0,0);
+  display.print("Signal Strength: ");
+  display.print(percent);
+  display.println("%");
+
+  drawSignalBars(level);
+
+  display.display();
+
+  delay(200);
+}
+
+C
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define POT_PIN 34
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+// 16x16 외계 생명체 비트맵
+const unsigned char alienBitmap [] PROGMEM = {
+  0b00011000, 0b00011000,
+  0b00111100, 0b00111100,
+  0b01111110, 0b01111110,
+  0b11111111, 0b11111111,
+  0b11100111, 0b11100111,
+  0b11111111, 0b11111111,
+  0b10111101, 0b10111101,
+  0b00100100, 0b00100100,
+  0b01000010, 0b01000010,
+  0b10000001, 0b10000001,
+  0b01000010, 0b01000010,
+  0b00100100, 0b00100100,
+  0b00011000, 0b00011000,
+  0b00100100, 0b00100100,
+  0b01000010, 0b01000010,
+  0b10000001, 0b10000001
+};
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+}
+
+void loop() {
+  int val = analogRead(POT_PIN);
+  int x = map(val, 0, 4095, 0, SCREEN_WIDTH - 16); // 비트맵 폭 16픽셀 고려
+  int y = 24; // 화면 수직 중앙쯤
+
+  display.clearDisplay();
+  display.drawBitmap(x, y, alienBitmap, 16, 16, SSD1306_WHITE);
+  display.display();
+
+  delay(50);
+}
+
+D
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET -1
+#define POT_PIN 34
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+void drawSlider(int pos) {
+  display.drawRect(10, 30, 108, 20, SSD1306_WHITE);
+  display.fillRect(pos, 32, 10, 16, SSD1306_WHITE);
+}
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+}
+
+void loop() {
+  int val = analogRead(POT_PIN);
+  int pos = map(val, 0, 4095, 10, 108);
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(SSD1306_WHITE);
+  display.setCursor(0,0);
+  display.print("Slide to Unlock:");
+
+  drawSlider(pos);
+
+  if(pos >= 100) {
+    display.setCursor(0, 55);
+    display.println("Unlocked!");
+  }
+
+  display.display();
+
+  delay(150);
+}
+
+E
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 64
+#define OLED_RESET    -1
+#define POT_PIN      34
+
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+
+// ASCII 캐릭터 이름 배열
+const char* characters[] = {"Cat", "Dog", "Panda", "Alien", "Robot", "Ghost", "Frog", "Lion"};
+const int charCount = sizeof(characters) / sizeof(characters[0]);
+
+void setup() {
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  display.clearDisplay();
+  randomSeed(analogRead(0));
+}
+
+void loop() {
+  int val = analogRead(POT_PIN);
+  int index = map(val, 0, 4095, 0, charCount - 1);
+
+  display.clearDisplay();
+  display.setTextColor(SSD1306_WHITE);
+
+  display.setTextSize(1);
+  display.setCursor(0, 0);
+  display.print("Your Character:");
+
+  display.setTextSize(3);
+  display.setCursor(0, 20);
+  display.print(characters[index]);
+
+  display.display();
+
+  delay(300);
 }
