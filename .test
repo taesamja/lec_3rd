@@ -588,7 +588,6 @@ A
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
-  Serial.begin(115200);
   pinMode(CDS_PIN, INPUT);
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
