@@ -6,7 +6,9 @@
 
 lib_deps = 
     adafruit/Adafruit SSD1306@^2.5.9
+    
     adafruit/Adafruit GFX Library@^1.11.5
+    
 
 // 16x16 외계 생명체 비트맵
 const unsigned char alienBitmap [] PROGMEM = {
