@@ -4,11 +4,14 @@
 
 9주차: https://docs.google.com/forms/d/1i7uP22rAtC2VklaOufU67soiZTge65KCSRyvU_n7wYE/edit
 
-"""
+
 lib_deps =
+
     adafruit/Adafruit SSD1306@^2.5.9
+    
     adafruit/Adafruit GFX Library@^1.11.5
-"""    
+    
+    
 
 // 16x16 외계 생명체 비트맵
 const unsigned char alienBitmap [] PROGMEM = {
