@@ -14,6 +14,7 @@ lib_deps =
     
 
 // 16x16 외계 생명체 비트맵
+
 const unsigned char alienBitmap [] PROGMEM = {
   0b00011000, 0b00011000,
   0b00111100, 0b00111100,
