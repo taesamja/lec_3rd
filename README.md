@@ -1,8 +1,8 @@
 제출
 
-3학년 3반 링크
+3학년 2반 링크
 
-10주차: https://docs.google.com/forms/d/1ksO5Q5FqTZsfDQlWVQeF7EV2Sq-b6Cw8_a9a8J83afo/edit
+10주차: https://docs.google.com/forms/d/1CmUEmFyiVM8cG_WRXSddjMmtzSleNt27bOz4TL3DAaE/edit
 
 
 
@@ -14,25 +14,26 @@ lib_deps =
     
     
 
-3학년 3반 링크
+3학년 2반 링크
 
-1주차: https://docs.google.com/forms/d/1Hv39qofeqbt3xRGsouMrNWOaCQXS3y-tnXW6lGGBB9s/edit
+1주차: https://docs.google.com/forms/d/1kIkdeGIpl2ks9HIeOjQBDeMbjP6vUaN_dDXiv_xzNUA/edit
 
-2주차: https://docs.google.com/forms/d/18smUsWIAQNEwL5ohoc7FuzPD22HGVCLhJafVo0g6WsM/edit
+2주차: https://docs.google.com/forms/d/1x51s0qT9ktjEAtiBFx1c6v5g9KKLQ9izjSaDm8bKYeE/edit
 
-3주차: https://docs.google.com/forms/d/1hVuFfGCbZXijUA6jGhAbHFgN7NlEDBYYIx77IZRzcSk/edit
+3주차: https://docs.google.com/forms/d/1JslqCKzNiTo0b-JkhNDKQTIRRSrNX_BmRzgc36uof6E/edit
 
-4주차: https://docs.google.com/forms/d/1Ej2WgeOdkF31haGUv3P3P16FGmHwJesYD1D7rw1J5oA/edit
+4주차: https://docs.google.com/forms/d/1L3wr5oLm6J-EeGUU6Ne5k7pZUYaaf9Q7ML7Smim9wS8/edit
 
-5주차: https://docs.google.com/forms/d/1xzg_UXJM9oypozfy3UmUHdPzawQjnv35a5UkV2oOmo8/edit
+5주차: https://docs.google.com/forms/d/1rO-3aRkG1novYlmdM1xsEP9q6-naolqgktdeXHCDHZ8/edit
 
-6주차: https://docs.google.com/forms/d/1IUk75-YCbTjO5qBFMu181Ib8QpLAy4of9Cn6h13mJfk/edit
+6주차: https://docs.google.com/forms/d/1Nh4JtvHUgX2pS-8IT70aMYMEmPgdKpIxUXnW8vf0ArY/edit
 
-7주차: https://docs.google.com/forms/d/10cgIDnIUOH180xFEpqauxrbKsJ6ThyycpFOEXNZ9gBU/edit
+7주차: https://docs.google.com/forms/d/1C5zTmT-d67IUGLiv4HsOik0IDgLN-cl5S7O5VQ6aMY0/edit
 
-8주차: https://docs.google.com/forms/d/1u1zFNxAxSwu0HKC01WtoIPxCFueJyTfzHq5N2beDGXM/edit
+8주차: https://docs.google.com/forms/d/16btjUaDBad_PwTW4BSjwu38iAPMPucWJppmuL-RjmpU/edit
 
-9주차: https://docs.google.com/forms/d/1i7uP22rAtC2VklaOufU67soiZTge65KCSRyvU_n7wYE/edit
+9주차: https://docs.google.com/forms/d/12QZQy5z7jik_JpkYPlZCw4bBdDKBDjU2Z-DZOYYfBss/edit
 
-10주차: https://docs.google.com/forms/d/1ksO5Q5FqTZsfDQlWVQeF7EV2Sq-b6Cw8_a9a8J83afo/edit
+10주차: https://docs.google.com/forms/d/1CmUEmFyiVM8cG_WRXSddjMmtzSleNt27bOz4TL3DAaE/edit
+
 
